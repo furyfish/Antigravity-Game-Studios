@@ -404,6 +404,12 @@ _yaml_helper_set_root() {
   _YH_ROOT="."
   [ -f "$_YH_ROOT/project.yaml" ] && return 0
   [ -f "$_YH_ROOT/project.local.yaml" ] && return 0
+  if [ -n "${ANTIGRAVITY_PROJECT_DIR:-}" ] && [ -f "$ANTIGRAVITY_PROJECT_DIR/project.yaml" ]; then
+    _YH_ROOT="$ANTIGRAVITY_PROJECT_DIR"; return 0
+  fi
+  if [ -n "${GEMINI_PROJECT_DIR:-}" ] && [ -f "$GEMINI_PROJECT_DIR/project.yaml" ]; then
+    _YH_ROOT="$GEMINI_PROJECT_DIR"; return 0
+  fi
   if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -f "$CLAUDE_PROJECT_DIR/project.yaml" ]; then
     _YH_ROOT="$CLAUDE_PROJECT_DIR"; return 0
   fi
@@ -1650,7 +1656,11 @@ if [ "${BASH_SOURCE[0]}" = "$0" ]; then
       shift
       if [ -z "${CLAUDE_PROJECT_DIR:-}" ] || [ ! -f "$CLAUDE_PROJECT_DIR/project.yaml" ]; then
         _yh_self_root=$(cd "$(dirname "$0")/../.." 2>/dev/null && pwd)
-        [ -n "$_yh_self_root" ] && CLAUDE_PROJECT_DIR="$_yh_self_root"
+        if [ -n "$_yh_self_root" ]; then
+          CLAUDE_PROJECT_DIR="$_yh_self_root"
+          ANTIGRAVITY_PROJECT_DIR="$_yh_self_root"
+          GEMINI_PROJECT_DIR="$_yh_self_root"
+        fi
       fi
       resolve_config "$@"
       ;;

@@ -1,21 +1,22 @@
 <p align="center">
-  <h1 align="center">Claude Code Game Studios</h1>
+  <h1 align="center">Antigravity Game Studios</h1>
   <p align="center">
-    Turn a single Claude Code session into a full game development studio.
+    Turn a single <strong>Antigravity</strong> (or Claude Code) session into a full game development studio.
     <br />
     49 agents. 74 skills. One coordinated AI team.
+    <br />
+    <em>Ported for Google Antigravity (IDE & CLI) with full upstream sync compatibility with Claude Code Game Studios.</em>
   </p>
 </p>
 
 <p align="center">
+  <a href="ANTIGRAVITY.md"><img src="https://img.shields.io/badge/Antigravity-Ready-4285F4?logo=google" alt="Antigravity Ready"></a>
+  <a href="FORK-SYNC-GUIDE.md"><img src="https://img.shields.io/badge/Fork%20Sync-Automated-brightgreen" alt="Fork Sync Automated"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
-  <a href=".claude/agents"><img src="https://img.shields.io/badge/agents-49-blueviolet" alt="49 Agents"></a>
-  <a href=".claude/skills"><img src="https://img.shields.io/badge/skills-74-green" alt="74 Skills"></a>
-  <a href=".claude/hooks"><img src="https://img.shields.io/badge/hooks-12-orange" alt="12 Hooks"></a>
-  <a href=".claude/rules"><img src="https://img.shields.io/badge/rules-13-red" alt="13 Rules"></a>
-  <a href="https://code.claude.com/docs"><img src="https://img.shields.io/badge/built%20for-Claude%20Code-f5f5f5?logo=anthropic" alt="Built for Claude Code"></a>
-  <a href="https://www.buymeacoffee.com/donchitos3"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20this%20project-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee"></a>
-  <a href="https://github.com/sponsors/Donchitos"><img src="https://img.shields.io/badge/GitHub%20Sponsors-Support%20this%20project-ea4aaa?logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
+  <a href=".agent/agents"><img src="https://img.shields.io/badge/agents-49-blueviolet" alt="49 Agents"></a>
+  <a href=".agent/skills"><img src="https://img.shields.io/badge/skills-74-green" alt="74 Skills"></a>
+  <a href=".agent/hooks"><img src="https://img.shields.io/badge/hooks-14-orange" alt="14 Hooks"></a>
+  <a href=".agent/rules"><img src="https://img.shields.io/badge/rules-13-red" alt="13 Rules"></a>
 </p>
 
 ---
@@ -32,6 +33,8 @@ The result: you still make every decision, but now you have a team that asks the
 
 ## Table of Contents
 
+- [Antigravity Setup & Usage (ANTIGRAVITY.md)](ANTIGRAVITY.md)
+- [Fork Synchronization Guide (FORK-SYNC-GUIDE.md)](FORK-SYNC-GUIDE.md)
 - [What's Included](#whats-included)
 - [Studio Hierarchy](#studio-hierarchy)
 - [Slash Commands](#slash-commands)

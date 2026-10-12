@@ -9,9 +9,14 @@
 Thumbs.db
 Desktop.ini
 
-# === Claude Code Local ===
+# === Claude Code & Antigravity Local ===
 .claude/settings.local.json
+.agent/settings.local.json
+.antigravity/settings.local.json
 CLAUDE.local.md
+ANTIGRAVITY.local.md
+GEMINI.local.md
+AGENTS.local.md
 project.local.yaml
 production/session-logs/
 # Ephemeral per-session checkpoint. directory-structure.md documents this as
@@ -20,6 +25,9 @@ production/session-state/
 .scratch/
 # Per-agent working memory written at runtime — not release material
 .claude/agent-memory/
+.agent/agent-memory/
+.antigravity/agent-memory/
+.temp_studio/
 
 
 # === Local sandboxes and scratch work ===

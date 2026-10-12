@@ -18,13 +18,18 @@
 # overriding a caller that legitimately means somewhere else.
 #
 # NOT an upward search: that resolves a nested project to its parent's config.
-if [ -f "project.yaml" ] || [ -d ".claude" ]; then
+if [ -f "project.yaml" ] || [ -d ".agent" ] || [ -d ".antigravity" ] || [ -d ".claude" ]; then
   CCGS_ROOT="$PWD"
+elif [ -n "${ANTIGRAVITY_PROJECT_DIR:-}" ] && [ -d "${ANTIGRAVITY_PROJECT_DIR}" ]; then
+  CCGS_ROOT="$ANTIGRAVITY_PROJECT_DIR"
+elif [ -n "${GEMINI_PROJECT_DIR:-}" ] && [ -d "${GEMINI_PROJECT_DIR}" ]; then
+  CCGS_ROOT="$GEMINI_PROJECT_DIR"
 elif [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -d "${CLAUDE_PROJECT_DIR}" ]; then
   CCGS_ROOT="$CLAUDE_PROJECT_DIR"
 else
   CCGS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." 2>/dev/null && pwd)"
 fi
+AGS_ROOT="$CCGS_ROOT"
 [ -n "$CCGS_ROOT" ] && cd "$CCGS_ROOT" 2>/dev/null || true
 
 # Hook: detect-gaps.sh

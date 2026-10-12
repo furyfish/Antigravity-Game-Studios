@@ -34,7 +34,11 @@ set -u
 export LC_ALL=C
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -f "$CLAUDE_PROJECT_DIR/project.yaml" ]; then
+if [ -n "${ANTIGRAVITY_PROJECT_DIR:-}" ] && [ -f "$ANTIGRAVITY_PROJECT_DIR/project.yaml" ]; then
+  ROOT="$ANTIGRAVITY_PROJECT_DIR"
+elif [ -n "${GEMINI_PROJECT_DIR:-}" ] && [ -f "$GEMINI_PROJECT_DIR/project.yaml" ]; then
+  ROOT="$GEMINI_PROJECT_DIR"
+elif [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -f "$CLAUDE_PROJECT_DIR/project.yaml" ]; then
   ROOT="$CLAUDE_PROJECT_DIR"
 fi
 cd "$ROOT" || exit 0
