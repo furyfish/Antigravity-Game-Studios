@@ -184,6 +184,7 @@ Nhờ kiến trúc symlink, 99% các lần sync sẽ tự động merge thành c
 - [ ] `GEMINI.md` và `AGENTS.md` trỏ đến `ANTIGRAVITY.md`.
 - [ ] Tất cả 14 hooks trong `.agent/hooks/` có quyền thực thi (`chmod +x`).
 - [ ] Tất cả 10 scripts trong `.agent/scripts/` có quyền thực thi (`chmod +x`).
+- [ ] Scripts phụ trợ trong `scripts/` (`get-agent-def.py`, `sync-engine-config.sh`, `sync-upstream.sh`) có quyền thực thi.
 - [ ] Lệnh `bash .agent/scripts/project-coherence.sh` chạy thành công (exit code 0).
 - [ ] Lệnh `bash .agent/hooks/session-start.sh` hiển thị session context đầy đủ.
 - [ ] Slash command `/start` và `/setup-engine` sẵn sàng trong Antigravity IDE.

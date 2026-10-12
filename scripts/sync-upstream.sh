@@ -120,9 +120,12 @@ repair_architecture() {
     fi
   done
   
-  # 4. Testing framework alias
+  # 4. Testing framework alias & documentation symlinks
   if [ -d "CCGS Skill Testing Framework" ]; then
     ensure_symlink "CCGS Skill Testing Framework" "AGS Skill Testing Framework"
+  fi
+  if [ -d "docs" ] && [ -f "FORK-SYNC-GUIDE.md" ]; then
+    (cd docs && ensure_symlink "../FORK-SYNC-GUIDE.md" "FORK-SYNC-GUIDE.md")
   fi
   
   # 5. Fix executable permissions for scripts and hooks
@@ -130,6 +133,7 @@ repair_architecture() {
   chmod +x .claude/scripts/*.sh 2>/dev/null || true
   chmod +x .claude/statusline.sh 2>/dev/null || true
   chmod +x scripts/*.sh 2>/dev/null || true
+  chmod +x scripts/*.py 2>/dev/null || true
   
   pass "All symlinks and script permissions are in order."
 }

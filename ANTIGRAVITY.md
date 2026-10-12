@@ -15,13 +15,29 @@ Each agent owns a specific domain, enforcing separation of concerns, high code q
 - **Build System**: [SPECIFY after choosing engine]
 - **Asset Pipeline**: [SPECIFY after choosing engine]
 
-> **Note**: Dedicated engine-specialist agents exist for Godot, Unity, and Unreal Engine 5 with specialized sub-agents. Use the set matching your configured engine.
+> **Note**: Engine-specialist agents exist for Godot, Unity, and Unreal with
+> dedicated sub-specialists. Use the set matching your engine.
+---
+
+## Engine Version Reference
+
+<!-- ENGINE-REFERENCE-IMPORT: the line below is engine-specific. /setup-engine
+     rewrites it to @docs/engine-reference/<engine>/VERSION.md for the chosen
+     engine, so a Unity or Unreal project stops loading the Godot reference every
+     session. It defaults to Godot (the template's example engine); skills that
+     need the pinned version read docs/engine-reference/<engine>/VERSION.md on
+     demand regardless of this import. -->
+@docs/engine-reference/godot/VERSION.md
+
+> **Engine Configuration Synchronization**:
+> Whenever `/setup-engine` or an architectural decision modifies the Technology Stack or the Engine Reference Import, the agent MUST propose the identical update for both `ANTIGRAVITY.md` and `CLAUDE.md` (or run `bash scripts/sync-engine-config.sh` to mirror changes).
+
 
 ---
 
 ## Project Structure
 
-For full tree details, see [.agent/docs/directory-structure.md](file:///.agent/docs/directory-structure.md) (or `@.claude/docs/directory-structure.md`).
+For full tree details, see [.agent/docs/directory-structure.md](.agent/docs/directory-structure.md) (or `@.claude/docs/directory-structure.md`).
 
 ```text
 ├── .agent/                  # Canonical Antigravity agent configuration & tools (symlink to .claude)
@@ -53,25 +69,29 @@ For full tree details, see [.agent/docs/directory-structure.md](file:///.agent/d
 
 ---
 
-## Engine Version Reference
+## Contextual Domain Rules (in `.agent/rules/`)
 
-<!-- ENGINE-REFERENCE-IMPORT: the line below is engine-specific. /setup-engine
-     rewrites it to @docs/engine-reference/<engine>/VERSION.md for the chosen
-     engine, so a Unity or Unreal project stops loading the Godot reference every
-     session. It defaults to Godot (the template's example engine); skills that
-     need the pinned version read docs/engine-reference/<engine>/VERSION.md on
-     demand regardless of this import. -->
-@docs/engine-reference/godot/VERSION.md
-
-Current engine reference: see [docs/engine-reference/godot/VERSION.md](file:///docs/engine-reference/godot/VERSION.md) (or `unity`/`unreal` matching `engine.name` in `project.yaml`).
-**Always inspect engine references before writing engine API code** to prevent hallucinated post-cutoff APIs.
+Before inspecting, authoring, or modifying files in specific project domains, agents MUST read and follow the corresponding rule in `.agent/rules/`:
+- **AI Systems**: `ai-code.md` for AI architectures, behavior trees, utility AI (`src/ai/**`, `Assets/**/AI/**`).
+- **Data Schemas & JSON**: `data-files.md` for data schemas, balance tables, and game data definitions (`assets/data/**`).
+- **Design Documents**: `design-docs.md` for GDDs, concept briefs, system mechanics, and economy designs (`design/**`).
+- **Engine Integration**: `engine-code.md` for node hierarchy, lifecycle methods, and engine API conventions.
+- **Gameplay Code**: `gameplay-code.md` for core loop mechanics, state machines, and player controllers.
+- **Narrative**: `narrative.md` for dialogue data, quests, lore, and text localization keys.
+- **Network & Multiplayer**: `network-code.md` for client-server boundaries, state synchronization, and lag compensation.
+- **Prototypes**: `prototype-code.md` for throwaway prototype guardrails, hack isolation, and timeboxes.
+- **Shaders & VFX**: `shader-code.md` for custom shaders, materials, performance budgets, and passes.
+- **Skill Authoring**: `skill-authoring.md` for standards when creating or modifying skills and workflows.
+- **Test Standards**: `test-standards.md` for unit, integration, smoke, and headless test requirements.
+- **UI & UX**: `ui-code.md` for UI component hierarchy, layout responsiveness, and accessibility hooks.
+- **Agent Memory**: `agent-memory.md` for persistent agent notes and project memory boundaries.
 
 ---
 
 ## Technical Preferences & Configuration
 
 `project.yaml` at the repo root is the **single source of truth** for project settings — engine, language, specialist routing, naming conventions, target platform, performance budgets, and operational modes (`modes.rigor`, `modes.automation`).
-Skills resolve configuration via `resolve_config` (see [.agent/docs/config-resolution.md](file:///.agent/docs/config-resolution.md)).
+Skills resolve configuration via `resolve_config` (see [.agent/docs/config-resolution.md](.agent/docs/config-resolution.md)).
 
 - **`modes.rigor`**:
   - `minimal` (Solo/Jam mode: game brief, lightweight ADRs, lean reviews)
@@ -98,11 +118,24 @@ When operating in Antigravity (App/IDE or CLI), agents map standard workflows to
 | **Run Command** | `run_command` | Execute tests, build scripts, analysis tools, and git |
 | **Ask User** | `ask_question` | Present interactive questions, option menus, and decisions |
 | **Delegate Subagent** | `invoke_subagent` | Spawn specialized agents (e.g. `lead-programmer`, `qa-lead`) |
-| **Define Subagent** | `define_subagent` | Instantiate custom subagents for specific tasks |
+| **Define Subagent** | `define_subagent` | Instantiate custom subagents from `.agent/agents/*.md` |
 | **Manage Tasks** | `manage_task` | Monitor or interact with background processes |
 | **Schedule / Wait** | `schedule` | One-shot timers or recurring monitoring |
 | **Web Search** | `search_web` / `read_url_content` | Fetch external engine docs, asset specs, or libraries |
 | **Image Generation** | `generate_image` | Generate concept art, UI mockups, or textures |
+
+---
+
+## Dynamic Subagent Registration & Delegation
+
+In Antigravity, subagents are registered via `define_subagent` and executed via `invoke_subagent`:
+
+1. **Check Registration**: When delegating to any studio specialist (from the 49 agents below), if the subagent is not yet present in the conversation's available subagents, extract its definition using:
+   ```bash
+   python3 scripts/get-agent-def.py <agent-name>
+   ```
+2. **Define**: Call `define_subagent` with the name, description, system prompt, and capabilities output by the helper.
+3. **Invoke**: Call `invoke_subagent` with `TypeName: "<agent-name>"`.
 
 ---
 
@@ -118,7 +151,7 @@ Every task follows: **Question -> Options -> Decision -> Draft -> Approval**
 5. **A skipped question is not an answer**: Re-ask in plain text and wait for confirmation.
 6. **Started outside project root?**: Warn first — hooks, rules, and configuration resolve relative to the project root.
 
-See [docs/COLLABORATIVE-DESIGN-PRINCIPLE.md](file:///docs/COLLABORATIVE-DESIGN-PRINCIPLE.md) for full protocol details.
+See [docs/COLLABORATIVE-DESIGN-PRINCIPLE.md](docs/COLLABORATIVE-DESIGN-PRINCIPLE.md) for full protocol details.
 
 > **First session?** If the project has no engine configured and no game concept, run `/start` to begin the guided onboarding flow.
 
@@ -126,7 +159,7 @@ See [docs/COLLABORATIVE-DESIGN-PRINCIPLE.md](file:///docs/COLLABORATIVE-DESIGN-P
 
 ## Coordination Rules & Agent Hierarchy
 
-See [.agent/docs/coordination-rules.md](file:///.agent/docs/coordination-rules.md) for full coordination rules.
+See [.agent/docs/coordination-rules.md](.agent/docs/coordination-rules.md) for full coordination rules.
 
 ### Studio Roster (49 Specialized Agents in `.agent/agents/`):
 - **Directors (4)**: `creative-director` (Vision), `technical-director` (Architecture), `producer` (Scope/Timeline), `art-director` (Visual style).
@@ -161,7 +194,7 @@ Skills can be triggered via slash commands (e.g. `/start`, `/setup-engine`) or i
 
 ## Coding Standards
 
-See [.agent/docs/coding-standards.md](file:///.agent/docs/coding-standards.md) (or `@.claude/docs/coding-standards.md`) for full guidelines:
+See [.agent/docs/coding-standards.md](.agent/docs/coding-standards.md) (or `@.claude/docs/coding-standards.md`) for full guidelines:
 - All public APIs require doc comments.
 - Gameplay values must be **data-driven** (external config/resources), never hardcoded in logic.
 - Prefer dependency injection over singletons for testability.
@@ -173,6 +206,7 @@ See [.agent/docs/coding-standards.md](file:///.agent/docs/coding-standards.md) (
 ## Context Management & Session Checkpointing
 
 - **`production/session-state/active.md` is the session checkpoint**: Memory persists on disk across session resets, restarts, and compacts. Always read `active.md` when resuming work.
+- **Active Session Initialization**: At the beginning of each session or before starting a major task, run `bash .agent/hooks/session-start.sh` and `bash .agent/hooks/detect-gaps.sh` to load current branch context, uncommitted status, and missing documentation artifacts.
 - **Deterministic Helpers in `.agent/scripts/` emit observations, never verdicts**: Scripts such as `project-coherence.sh`, `artifact-check.sh`, `story-status.sh`, and `gdd-structure-check.sh` output factual checks; the agent and user determine the verdict.
 
 ---
@@ -191,4 +225,4 @@ See [.agent/docs/coding-standards.md](file:///.agent/docs/coding-standards.md) (
 - The terminal statusline is driven by `.agent/statusline.sh`.
 
 ### 3. Upstream Sync
-- To sync updates from the upstream Claude-Code-Game-Studios repository in the future, follow [FORK-SYNC-GUIDE.md](file:///FORK-SYNC-GUIDE.md) or run `bash scripts/sync-upstream.sh`.
+- To sync updates from the upstream Claude-Code-Game-Studios repository in the future, follow [FORK-SYNC-GUIDE.md](FORK-SYNC-GUIDE.md) or run `bash scripts/sync-upstream.sh`.
